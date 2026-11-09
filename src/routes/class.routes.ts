@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { ClassController } from '../controllers/class.controller.js';
+
+const router = Router();
+
+router.get('/', ClassController.getClasses);
+router.get('/:id', ClassController.getClassById);
+router.post('/', ClassController.createClass);
+
+export const classRoutes = router;
+
