@@ -70,4 +70,45 @@ export class ClassService {
     }
     return cls;
   }
+
+  /**
+   * Cập nhật thông tin lớp học (tên, khối, màu sắc ô vuông)
+   */
+  static async updateClass(id: string, data: any): Promise<IClassRoomDocument> {
+    const cls = await ClassRoom.findById(id);
+    if (!cls) {
+      throw AppError.notFound('Không tìm thấy lớp học cần cập nhật.');
+    }
+
+    if (data.name && data.name.trim() !== cls.name) {
+      const existing = await ClassRoom.findOne({ name: data.name.trim(), _id: { $ne: id } });
+      if (existing) {
+        throw AppError.conflict(`Tên lớp học "${data.name}" đã được sử dụng.`);
+      }
+      cls.name = data.name.trim();
+    }
+
+    if (data.grade !== undefined) cls.grade = data.grade;
+    if (data.academicYear !== undefined) cls.academicYear = data.academicYear;
+    if (data.homeroomTeacher !== undefined) cls.homeroomTeacher = data.homeroomTeacher;
+    if (data.roomNumber !== undefined) cls.roomNumber = data.roomNumber;
+    if (data.colorTheme !== undefined) cls.colorTheme = data.colorTheme;
+    if (data.description !== undefined) cls.description = data.description;
+
+    await cls.save();
+    return cls;
+  }
+
+  /**
+   * Xóa một lớp học khỏi hệ thống
+   */
+  static async deleteClass(id: string): Promise<{ success: boolean; message: string }> {
+    const cls = await ClassRoom.findById(id);
+    if (!cls) {
+      throw AppError.notFound('Không tìm thấy lớp học cần xóa.');
+    }
+
+    await ClassRoom.findByIdAndDelete(id);
+    return { success: true, message: `Đã xóa lớp học ${cls.name} thành công.` };
+  }
 }

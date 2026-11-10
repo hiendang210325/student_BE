@@ -1,5 +1,11 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 
+export interface IClassColorTheme {
+  bg: string;
+  border: string;
+  text: string;
+}
+
 export interface IClassRoom {
   name: string;
   grade: number;
@@ -9,6 +15,7 @@ export interface IClassRoom {
   schedule?: string;
   maxCapacity?: number;
   description?: string;
+  colorTheme?: IClassColorTheme;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -60,6 +67,11 @@ const classRoomSchema = new Schema<IClassRoomDocument, IClassRoomModel>(
     description: {
       type: String,
       default: '',
+    },
+    colorTheme: {
+      bg: { type: String, default: '#FFE0EB' },
+      border: { type: String, default: '#F8A5C2' },
+      text: { type: String, default: '#A61E4D' },
     },
   },
   {

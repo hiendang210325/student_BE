@@ -41,4 +41,30 @@ export class ClassController {
       next(error);
     }
   }
+
+  /**
+   * PUT /api/classes/:id
+   * Cập nhật thông tin lớp học (tên, khối, màu sắc ô vuông)
+   */
+  static async updateClass(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const updated = await ClassService.updateClass(req.params.id, req.body);
+      ApiResponseBuilder.success(res, updated, 'Cập nhật lớp học thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * DELETE /api/classes/:id
+   * Xóa một lớp học khỏi hệ thống
+   */
+  static async deleteClass(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await ClassService.deleteClass(req.params.id);
+      ApiResponseBuilder.success(res, result, 'Xóa lớp học thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
 }
